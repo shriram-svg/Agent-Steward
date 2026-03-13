@@ -1,9 +1,9 @@
-from typing import Optional
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
-    # Anthropic
-    anthropic_api_key: str = ""
+    # Model Router runs on HOST, reachable from Docker via host.docker.internal
+    model_router_url: str = "http://host.docker.internal:8080"
 
     # Ecosystem service URLs (internal Docker network)
     task_manager_url: str = "http://task-manager:8000"
@@ -13,6 +13,9 @@ class Settings(BaseSettings):
 
     # Postgres DSN for direct DB access
     postgres_dsn: str = "postgresql://postgres:postgres@postgres:5432"
+
+    # Service token for internal Stimulus Bus injection
+    service_token: str = "steward-internal"
 
     # All known ecosystem services for health checks
     ecosystem_services: dict = {
@@ -25,7 +28,6 @@ class Settings(BaseSettings):
         "forge": "http://forge:8001",
         "observer": "http://observer:8007",
         "janitor": "http://janitor:8008",
-        "model-router": "http://model-router:8004",
         "artifact-store": "http://artifact-store:8000",
         "secret-manager": "http://secret-manager:8001",
         "stimulus-bus": "http://stimulus-bus:8010",
@@ -33,5 +35,6 @@ class Settings(BaseSettings):
     }
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+
 
 settings = Settings()
